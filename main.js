@@ -139,12 +139,12 @@ character = (type, mode, direction) => {
                 top_rails = false;
                 bottom_rails = false;
             } else {
-                rails(0.5 * direction);
+                rails(0.75 * direction);
                 top_rails = true;
                 bottom_rails = true;
             }
         }
-        space = 0.5;
+        space = 0.75;
     } else if(type === `conjunction_northwest` || type === `i`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `conjunction`, 1, 0);
@@ -260,14 +260,14 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `sun` || type === `u`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `circle`, 1, 0);
-            stroke(`#fff`, pen.white, `circle`, 1, 0);
+            stroke(`#000`, pen.black, `circle`, 1, 0.25);
+            stroke(`#fff`, pen.white, `circle`, 1, 0.25);
         } else if(mode === `rails`) {
-            rails(0.5 * direction);
+            rails(0.75 * direction);
             top_rails = false;
             bottom_rails = false;
         }
-        space = 1;
+        space = 1.5;
     } else if(type === `sunrise` || type === `c`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `circle`, 2, 0);
