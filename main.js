@@ -7,17 +7,16 @@ const ctx = html_canvas.getContext(`2d`); //
 
 ctx.translate(0.5, 0.5); // setup canvas //
 
-character_size = (factor) => {return field_character_size.value * factor}; // create variables
+saved_character_size_value = field_character_size.value; // create functions and variables
+character_size = (factor) => {return Math.round(Number(field_character_size.value) * 2 * factor)};
 pen = {x: character_size(1), y: character_size(1), black: 19, white: 8};
-top_rails = false; bottom_rails = false; //
-
-adjust_canvas = () => { // create functions
+top_rails = false; bottom_rails = false;
+adjust_canvas = () => {
     html_canvas.width = field_width.value;
     html_canvas.height = field_height.value;
     ctx.fillStyle = (`#555`);
     ctx.fillRect(0, 0, html_canvas.width, html_canvas.height);
 }
-
 stroke = (colour, thickness, type, variation, offset, length) => {
     ctx.beginPath();
     ctx.strokeStyle = colour;
@@ -75,7 +74,7 @@ rails = (length) => {
 }
 character = (type, mode, direction) => {
     let space = 0;
-    if(type === `hill` || type === `e`) {
+    if(type === `hill`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `arc`, 2, 0);
             stroke(`#fff`, pen.white, `arc`, 2, 0);
@@ -91,9 +90,13 @@ character = (type, mode, direction) => {
                 rails(1 * direction);
                 bottom_rails = true;
             }
+            // strandedness
+                // top    = 0
+                // bottom = 0
+                // total  = 0
         }
         space = 1;
-    } else if(type === `waterfall` || type === `t`) {
+    } else if(type === `waterfall`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `arc`, 1, 0);
             stroke(`#fff`, pen.white, `arc`, 1, 0);
@@ -109,9 +112,13 @@ character = (type, mode, direction) => {
                 rails(1 * direction);
                 top_rails = true;
             }
+            // strandedness
+                // top    = 0
+                // bottom = 0
+                // total  = 0
         }
         space = 1;
-    } else if(type === `crescent` || type === `a`) {
+    } else if(type === `crescent`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `arc`, 3, 0.5);
             stroke(`#fff`, pen.white, `arc`, 3, 0.5);
@@ -126,9 +133,13 @@ character = (type, mode, direction) => {
                 top_rails = false;
                 bottom_rails = false;
             }
+            // strandedness
+                // top    = 0
+                // bottom = 0
+                // total  = 0
         }
         space = 0.5;
-    } else if(type === `moon` || type === `o`) {
+    } else if(type === `moon`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `arc`, 1, 0);
             stroke(`#fff`, pen.white, `arc`, 1, 0);
@@ -143,9 +154,13 @@ character = (type, mode, direction) => {
                 top_rails = true;
                 bottom_rails = true;
             }
+            // strandedness
+                // top    = 0
+                // bottom = 0
+                // total  = 0
         }
         space = 0.75;
-    } else if(type === `conjunction_northwest` || type === `i`) {
+    } else if(type === `conjunction_northwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `conjunction`, 1, 0);
             stroke(`#fff`, pen.white, `conjunction`, 1, 0);
@@ -161,9 +176,13 @@ character = (type, mode, direction) => {
                 top_rails = true;
                 bottom_rails = true;
             }
+            // strandedness
+                // top    = 2
+                // bottom = 0
+                // total  = 2
         }
         space = 1;
-    } else if(type === `conjunction_southwest` || type === `n`) {
+    } else if(type === `conjunction_southwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `conjunction`, 2, 0);
             stroke(`#fff`, pen.white, `conjunction`, 2, 0);
@@ -179,9 +198,13 @@ character = (type, mode, direction) => {
                 top_rails = true;
                 bottom_rails = true;
             }
+            // strandedness
+                // top    = 0
+                // bottom = 2
+                // total  = 2
         }
         space = 1;
-    } else if(type === `conjunction_northeast` || type === `s`) {
+    } else if(type === `conjunction_northeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `conjunction`, 1, 0);
             stroke(`#fff`, pen.white, `conjunction`, 1, 0);
@@ -197,9 +220,13 @@ character = (type, mode, direction) => {
                 top_rails = true;
                 bottom_rails = false;
             }
+            // strandedness
+                // top    = 2
+                // bottom = 0
+                // total  = 2
         }
         space = 1;
-    } else if(type === `conjunction_southeast` || type === `h`) {
+    } else if(type === `conjunction_southeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `conjunction`, 2, 0);
             stroke(`#fff`, pen.white, `conjunction`, 2, 0);
@@ -215,9 +242,13 @@ character = (type, mode, direction) => {
                 top_rails = false;
                 bottom_rails = true;
             }
+            // strandedness
+                // top    = 0
+                // bottom = 2
+                // total  = 2
         }
         space = 1;
-    } else if(type === `erosion` || type === `r`) {
+    } else if(type === `erosion`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `arc`, 1, 0);
             stroke(`#fff`, pen.white, `arc`, 1, 0);
@@ -230,9 +261,13 @@ character = (type, mode, direction) => {
         } else if(mode === `rails`) {
             top_rails = true;
             bottom_rails = true;
+            // strandedness
+                // top    = 2
+                // bottom = 2
+                // total  = 4
         }
         space = 1;
-    } else if(type === `flood` || type === `d`) {
+    } else if(type === `flood`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `arc`, 2, 0);
             stroke(`#fff`, pen.white, `arc`, 2, 0);
@@ -245,9 +280,13 @@ character = (type, mode, direction) => {
         } else if(mode === `rails`) {
             top_rails = true;
             bottom_rails = true;
+            // strandedness
+                // top    = 2
+                // bottom = 2
+                // total  = 4
         }
         space = 1;
-    } else if(type === `hourglass` || type === `l`) {
+    } else if(type === `hourglass`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `conjunction`, 1, 0);
             stroke(`#fff`, pen.white, `conjunction`, 1, 0);
@@ -256,9 +295,13 @@ character = (type, mode, direction) => {
         } else if(mode === `rails`) {
             top_rails = true;
             bottom_rails = true;
+            // strandedness
+                // top    = 2
+                // bottom = 2
+                // total  = 4
         }
         space = 1;
-    } else if(type === `sun` || type === `u`) {
+    } else if(type === `sun`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `circle`, 1, 0.25);
             stroke(`#fff`, pen.white, `circle`, 1, 0.25);
@@ -266,25 +309,37 @@ character = (type, mode, direction) => {
             rails(0.75 * direction);
             top_rails = false;
             bottom_rails = false;
+            // strandedness
+                // top    = -2
+                // bottom = -2
+                // total  = -4
         }
         space = 1.5;
-    } else if(type === `sunrise` || type === `c`) {
+    } else if(type === `sunrise`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `circle`, 2, 0);
             stroke(`#fff`, pen.white, `circle`, 2, 0);
         } else if(mode === `rails`) {
             rails(0.5 * direction);
+            // strandedness
+                // top    = 0
+                // bottom = 0
+                // total  = 0
         }
         space = 0.5;
-    } else if(type === `sunset` || type === `m`) {
+    } else if(type === `sunset`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `circle`, 3, 0);
             stroke(`#fff`, pen.white, `circle`, 3, 0);
         } else if(mode === `rails`) {
             rails(0.5 * direction);
+            // strandedness
+                // top    = 0
+                // bottom = 0
+                // total  = 0
         }
         space = 0.5;
-    } else if(type === `spiral_northeast` || type === `f`) {
+    } else if(type === `spiral_northeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 1, 0, 0.75);
             stroke(`#fff`, pen.white, `line`, 1, 0, 0.75);
@@ -303,9 +358,13 @@ character = (type, mode, direction) => {
             rails(0.75 * direction);
             top_rails = true;
             bottom_rails = false;
+            // strandedness
+                // top    = 2
+                // bottom = -2
+                // total  = 0
         }
         space = 1.5;
-    } else if(type === `spiral_southeast` || type === `y`) {
+    } else if(type === `spiral_southeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 2, 0, 0.75);
             stroke(`#fff`, pen.white, `line`, 2, 0, 0.75);
@@ -324,9 +383,13 @@ character = (type, mode, direction) => {
             rails(0.75 * direction);
             top_rails = false;
             bottom_rails = true;
+            // strandedness
+                // top    = -2
+                // bottom = 2
+                // total  = 0
         }
         space = 1.5;
-    } else if(type === `spiral_northwest` || type === `w`) {
+    } else if(type === `spiral_northwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 1, 0.75, 0.75);
             stroke(`#fff`, pen.white, `line`, 1, 0.75, 0.75);
@@ -345,9 +408,13 @@ character = (type, mode, direction) => {
             rails(0.75 * direction);
             top_rails = true;
             bottom_rails = false;
+            // strandedness
+                // top    = 2
+                // bottom = -2
+                // total  = 0
         }
         space = 1.5;
-    } else if(type === `spiral_southwest` || type === `g`) {
+    } else if(type === `spiral_southwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 2, 0.75, 0.75);
             stroke(`#fff`, pen.white, `line`, 2, 0.75, 0.75);
@@ -366,9 +433,13 @@ character = (type, mode, direction) => {
             rails(0.75 * direction);
             top_rails = false;
             bottom_rails = true;
+            // strandedness
+                // top    = -2
+                // bottom = 2
+                // total  = 0
         }
         space = 1.5;
-    } else if(type === `wheel_northeast` || type === `p`) {
+    } else if(type === `wheel_northeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 1, 0.75, 0.75);
             stroke(`#000`, pen.black, `arc`, 1, 0.75);
@@ -390,9 +461,13 @@ character = (type, mode, direction) => {
                 rails(0.75 * direction);
                 bottom_rails = false;
             }
+            // strandedness
+                // top    = 0
+                // bottom = -2
+                // total  = -2
         }
         space = 1.5;
-    } else if(type === `wheel_southeast` || type === `b`) {
+    } else if(type === `wheel_southeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 2, 0.75, 0.75);
             stroke(`#000`, pen.black, `arc`, 1, 0.75);
@@ -414,9 +489,13 @@ character = (type, mode, direction) => {
                 rails(0.75 * direction);
                 top_rails = false;
             }
+            // strandedness
+                // top    = -2
+                // bottom = 0
+                // total  = -2
         }
         space = 1.5;
-    } else if(type === `wheel_northwest` || type === `v`) {
+    } else if(type === `wheel_northwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 1, 0, 0.75);
             stroke(`#000`, pen.black, `arc`, 1, 0.75);
@@ -438,9 +517,13 @@ character = (type, mode, direction) => {
                 top_rails = true;
                 bottom_rails = false;
             }
+            // strandedness
+                // top    = 0
+                // bottom = -2
+                // total  = -2
         }
         space = 1.5;
-    } else if(type === `wheel_southwest` || type === `k`) {
+    } else if(type === `wheel_southwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 2, 0, 0.75);
             stroke(`#000`, pen.black, `arc`, 1, 0.75);
@@ -462,9 +545,13 @@ character = (type, mode, direction) => {
                 top_rails = false;
                 bottom_rails = true;
             }
+            // strandedness
+                // top    = 0
+                // bottom = -2
+                // total  = -2
         }
         space = 1.5;
-    } else if(type === `sun_northeast` || type === `x`) {
+    } else if(type === `sun_northeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 1, 0.5, 1);
             stroke(`#000`, pen.black, `circle`, 1, 0);
@@ -480,9 +567,13 @@ character = (type, mode, direction) => {
                 rails(1 * direction);
                 bottom_rails = false;
             }
+            // strandedness
+                // top    = -2
+                // bottom = 0
+                // total  = -2
         }
         space = 1.5;
-    } else if(type === `sun_southeast` || type === `q`) {
+    } else if(type === `sun_southeast`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 2, 0.5, 1);
             stroke(`#000`, pen.black, `circle`, 1, 0);
@@ -498,9 +589,13 @@ character = (type, mode, direction) => {
                 rails(1 * direction);
                 top_rails = false;
             }
+            // strandedness
+                // top    = -2
+                // bottom = 0
+                // total  = -2
         }
         space = 1.5;
-    } else if(type === `sun_northwest` || type === `j`) {
+    } else if(type === `sun_northwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 1, 0, 0.75);
             stroke(`#000`, pen.black, `circle`, 1, 0.25);
@@ -516,9 +611,13 @@ character = (type, mode, direction) => {
                 top_rails = true;
                 bottom_rails = false;
             }
+            // strandedness
+                // top    = 0
+                // bottom = -2
+                // total  = -2
         }
         space = 1.5;
-    } else if(type === `sun_southwest` || type === `z`) {
+    } else if(type === `sun_southwest`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `line`, 2, 0, 0.75);
             stroke(`#000`, pen.black, `circle`, 1, 0.25);
@@ -534,42 +633,16 @@ character = (type, mode, direction) => {
                 top_rails = false;
                 bottom_rails = true;
             }
+            // strandedness
+                // top    = -2
+                // bottom = 0
+                // total  = -2
         }
         space = 1.5;
     }
     pen.x += character_size(space) * direction;
     return space;
 }
-
-word_marcus = () => {
-    // rails
-    character(`crescent`, `rails`, 1);
-    character(`m`, `rails`, 1);
-    character(`a`, `rails`, 1);
-    character(`r`, `rails`, 1);
-    character(`c`, `rails`, 1);
-    character(`u`, `rails`, 1);
-    character(`s`, `rails`, 1);
-    // backward rails
-    character(`s`, `rails`, -1);
-    character(`u`, `rails`, -1);
-    character(`c`, `rails`, -1);
-    character(`r`, `rails`, -1);
-    character(`a`, `rails`, -1);
-    character(`m`, `rails`, -1);
-    
-    pen.x = character_size(1);
-    // write
-    character(`crescent`, `write`, 1);
-    character(`m`, `write`, 1);
-    character(`a`, `write`, 1);
-    character(`r`, `write`, 1);
-    character(`c`, `write`, 1);
-    character(`u`, `write`, 1);
-    character(`s`, `write`, 1);
-    character(`moon`, `write`, 1);
-}
-
 cipher = () => {
     adjust_canvas();
     pen.x = character_size(1);
@@ -578,7 +651,7 @@ cipher = () => {
     let to_cipher = `a` + field_to_cipher.textContent + `o`;
     for(message_letter = 0; message_letter < to_cipher.length; message_letter++) {
         character_string = `${to_cipher.charAt(message_letter)}`;
-        character_size_variable = character_size(character(character_string));
+        character_size_variable = character_size(character(encoded_character(character_string)));
         message_size += character_size_variable;
         message_letters_array[message_letter] = [character_string, character_size_variable, message_size];
     }
@@ -586,76 +659,104 @@ cipher = () => {
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
         console.log(`${message_letters_array[message_letter][0]}`);
         pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
-        character(message_letters_array[message_letter][0], `rails`, 1);
+        character(encoded_character(message_letters_array[message_letter][0]), `rails`, 1);
     }
     for(message_letter = message_letters_array.length - 1; message_letter >= 0; message_letter--) {
         console.log(`${message_letters_array[message_letter][0]}`);
         pen.x = character_size(1) + message_letters_array[message_letter][2];
-        character(message_letters_array[message_letter][0], `rails`, -1);
+        character(encoded_character(message_letters_array[message_letter][0]), `rails`, -1);
     }
     // Lines and conjunctions
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
-        if(message_letters_array[message_letter][0] === `i`
-        || message_letters_array[message_letter][0] === `n`
-        || message_letters_array[message_letter][0] === `s`
-        || message_letters_array[message_letter][0] === `h`) {
+        if(encoded_character(message_letters_array[message_letter][0]) === `conjunction_northwest`
+        || encoded_character(message_letters_array[message_letter][0]) === `conjunction_southwest`
+        || encoded_character(message_letters_array[message_letter][0]) === `conjunction_northeast`
+        || encoded_character(message_letters_array[message_letter][0]) === `conjunction_southeast`) {
             pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
-            character(message_letters_array[message_letter][0], `write`, 1);
+            character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
     // Arcs and big circles
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
-        if(message_letters_array[message_letter][0] === `e`
-        || message_letters_array[message_letter][0] === `t`
-        || message_letters_array[message_letter][0] === `a`
-        || message_letters_array[message_letter][0] === `o`
-        || message_letters_array[message_letter][0] === `r`
-        || message_letters_array[message_letter][0] === `d`
-        || message_letters_array[message_letter][0] === `l`
-        || message_letters_array[message_letter][0] === `u`
-        || message_letters_array[message_letter][0] === `f`
-        || message_letters_array[message_letter][0] === `y`
-        || message_letters_array[message_letter][0] === `w`
-        || message_letters_array[message_letter][0] === `g`
-        || message_letters_array[message_letter][0] === `p`
-        || message_letters_array[message_letter][0] === `b`
-        || message_letters_array[message_letter][0] === `v`
-        || message_letters_array[message_letter][0] === `k`
-        || message_letters_array[message_letter][0] === `x`
-        || message_letters_array[message_letter][0] === `q`
-        || message_letters_array[message_letter][0] === `j`
-        || message_letters_array[message_letter][0] === `z`) {
+        if(encoded_character(message_letters_array[message_letter][0]) === `hill`
+        || encoded_character(message_letters_array[message_letter][0]) === `waterfall`
+        || encoded_character(message_letters_array[message_letter][0]) === `crescent`
+        || encoded_character(message_letters_array[message_letter][0]) === `moon`
+        || encoded_character(message_letters_array[message_letter][0]) === `erosion`
+        || encoded_character(message_letters_array[message_letter][0]) === `flood`
+        || encoded_character(message_letters_array[message_letter][0]) === `hourglass`
+        || encoded_character(message_letters_array[message_letter][0]) === `sun`
+        || encoded_character(message_letters_array[message_letter][0]) === `spiral_northeast`
+        || encoded_character(message_letters_array[message_letter][0]) === `spiral_northwest`
+        || encoded_character(message_letters_array[message_letter][0]) === `spiral_southeast`
+        || encoded_character(message_letters_array[message_letter][0]) === `spiral_southwest`
+        || encoded_character(message_letters_array[message_letter][0]) === `wheel_northeast`
+        || encoded_character(message_letters_array[message_letter][0]) === `wheel_southeast`
+        || encoded_character(message_letters_array[message_letter][0]) === `wheel_northwest`
+        || encoded_character(message_letters_array[message_letter][0]) === `wheel_southwest`
+        || encoded_character(message_letters_array[message_letter][0]) === `sun_northeast`
+        || encoded_character(message_letters_array[message_letter][0]) === `sun_southeast`
+        || encoded_character(message_letters_array[message_letter][0]) === `sun_northwest`
+        || encoded_character(message_letters_array[message_letter][0]) === `sun_southwest`
+        ) {
             pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
-            character(message_letters_array[message_letter][0], `write`, 1);
+            character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
     // Small circles
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
-        if(message_letters_array[message_letter][0] === `c`
-        || message_letters_array[message_letter][0] === `m`) {
+        if(encoded_character(message_letters_array[message_letter][0]) === `sunrise`
+        || encoded_character(message_letters_array[message_letter][0]) === `sunset`) {
             pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
-            character(message_letters_array[message_letter][0], `write`, 1);
+            character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
-} //
+}
+character_map = {};
+program_character = (character, code) => {character_map[character] = code};
+encoded_character = (character) => {return character_map[character]}; //
 
-field_height.addEventListener(`input`, () => {adjust_canvas()}); // add event listeners
-field_width.addEventListener(`input`, () => {adjust_canvas()});
+program_character(`e`, `hill`);
+program_character(`t`, `waterfall`);
+program_character(`a`, `crescent`);
+program_character(`o`, `moon`);
+program_character(`i`, `conjunction_northwest`);
+program_character(`n`, `conjunction_southwest`);
+program_character(`s`, `conjunction_northeast`);
+program_character(`h`, `conjunction_southeast`);
+program_character(`r`, `erosion`);
+program_character(`d`, `flood`);
+program_character(`l`, `hourglass`);
+program_character(`u`, `sun`);
+program_character(`c`, `sunrise`);
+program_character(`m`, `sunset`);
+program_character(`f`, `spiral_northeast`);
+program_character(`y`, `spiral_southeast`);
+program_character(`w`, `spiral_northwest`);
+program_character(`g`, `spiral_southwest`);
+program_character(`p`, `wheel_northeast`);
+program_character(`b`, `wheel_southeast`);
+program_character(`v`, `wheel_northwest`);
+program_character(`k`, `wheel_southwest`);
+program_character(`x`, `sun_northeast`);
+program_character(`q`, `sun_southeast`);
+program_character(`j`, `sun_northwest`);
+program_character(`z`, `sun_southwest`);
+
+field_height.addEventListener(`input`, () => {  // add event listeners
+    adjust_canvas();
+    cipher();
+})
+field_width.addEventListener(`input`, () => {
+    adjust_canvas();
+    cipher();
+})
+field_character_size.addEventListener(`input`, () => {
+    adjust_canvas();
+    cipher();
+})
 field_to_cipher.addEventListener(`input`, () => {cipher()}); //
 
 adjust_canvas(); // initialize //
 
-// Overlapping:
-    // Instead of printing the segments of the character directly, make a queue for printing instructions
-    // The queue will remember where each thing needs to be printed, but it will automatically print Lines and conjunctions > Small circles > Arcs and big circles
-
-// Starting & ending rails:
-    // 1. Make a function for turning bottom rails on, a function for turning bottom rails off, and the same for top rails
-    // 2. Every time an arc of variation 2 or 3 is made,
-            // If bottom rails are off,
-                // If it was variation 2, turn bottom rails on
-            // Else if bottom rails are on, turn bottom rails off
-    // 3. Every time an arc of variation 1 or 4 is made,
-            // If top rails are off,
-                // If it was variation 4, turn top rails on
-            // Else if top rails are on, turn top rails off
+// Create a function where the parameters visually show what the character will look like
