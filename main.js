@@ -9,7 +9,7 @@ ctx.translate(0.5, 0.5); // setup canvas //
 
 saved_character_size_value = field_character_size.value; // create functions and variables
 character_size = (factor) => {return Math.round(Number(field_character_size.value) * 2 * factor)};
-pen = {x: character_size(1), y: character_size(1), black: 19, white: 8};
+pen = {x: character_size(1), y: character_size(1), black: 20, white: 8};
 top_rails = false; bottom_rails = false;
 adjust_canvas = () => {
     html_canvas.width = field_width.value;
@@ -74,7 +74,26 @@ rails = (length) => {
 }
 character = (type, mode, direction) => {
     let space = 0;
-    if(type === `hill`) {
+    if(type === `space`) {
+        if(mode === `write`) {
+            stroke(`#000`, pen.black, `arc`, 3, 1.75);
+            stroke(`#fff`, pen.white, `arc`, 3, 1.75);
+            stroke(`#000`, pen.black, `arc`, 4, 1.75);
+            stroke(`#fff`, pen.white, `arc`, 4, 1.75);
+            stroke(`#000`, pen.black, `arc`, 1, 0);
+            stroke(`#fff`, pen.white, `arc`, 1, 0);
+            stroke(`#000`, pen.black, `arc`, 2, 0);
+            stroke(`#fff`, pen.white, `arc`, 2, 0);
+        } else if(mode === `rails`) {
+            top_rails = true;
+            bottom_rails = true;
+            // strandedness
+            //     top    = 2
+            //     bottom = 2
+            //     total  = 4
+        }
+        space = 1.75;
+    } else if(type === `hill`) {
         if(mode === `write`) {
             stroke(`#000`, pen.black, `arc`, 2, 0);
             stroke(`#fff`, pen.white, `arc`, 2, 0);
@@ -678,7 +697,8 @@ cipher = () => {
     }
     // Arcs and big circles
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
-        if(encoded_character(message_letters_array[message_letter][0]) === `hill`
+        if(encoded_character(message_letters_array[message_letter][0]) === `space`
+        || encoded_character(message_letters_array[message_letter][0]) === `hill`
         || encoded_character(message_letters_array[message_letter][0]) === `waterfall`
         || encoded_character(message_letters_array[message_letter][0]) === `crescent`
         || encoded_character(message_letters_array[message_letter][0]) === `moon`
@@ -716,6 +736,8 @@ character_map = {};
 program_character = (character, code) => {character_map[character] = code};
 encoded_character = (character) => {return character_map[character]}; //
 
+program_character(` `, `space`); // "space"
+program_character(` `, `space`); // "no-break space"
 program_character(`e`, `hill`);
 program_character(`t`, `waterfall`);
 program_character(`a`, `crescent`);
@@ -757,6 +779,7 @@ field_character_size.addEventListener(`input`, () => {
 })
 field_to_cipher.addEventListener(`input`, () => {cipher()}); //
 
-adjust_canvas(); // initialize //
+adjust_canvas();
+cipher(); // initialize //
 
 // Create a function where the parameters visually show what the character will look like
