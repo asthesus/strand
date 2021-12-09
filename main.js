@@ -667,7 +667,7 @@ cipher = () => {
     pen.x = character_size(1);
     let message_letters_array = [];
     let message_size = 0;
-    let to_cipher = `a` + field_to_cipher.textContent + `o`;
+    let to_cipher = `a` + field_to_cipher.textContent.toLowerCase() + `o`;
     for(message_letter = 0; message_letter < to_cipher.length; message_letter++) {
         character_string = `${to_cipher.charAt(message_letter)}`;
         character_size_variable = character_size(character(encoded_character(character_string)));
