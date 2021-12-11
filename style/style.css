@@ -11,7 +11,7 @@ body{
     color: #eee;
     font-family: 'Courier New';
     font-size: 1.5em;
-    padding: 2%;
+    padding: 1%;
 }
 .tocipher[contenteditable]{
     border: 1px solid #eee;

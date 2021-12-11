@@ -6,6 +6,9 @@ const ctx = html_canvas.getContext(`2d`); //
 ctx.translate(0.5, 0.5); // setup canvas //
 
 saved_character_size_value = field_character_size.value; // create functions and variables
+indent_width = 39;
+margin_horizontal = 80;
+margin_vertical = 70;
 character_size = (factor) => {return Math.round(Number(field_character_size.value) * 2 * factor)};
 pen = {x: character_size(1), y: character_size(1), black: 20, white: 8};
 top_rails = false; bottom_rails = false;
@@ -655,7 +658,6 @@ character = (type, mode, direction) => {
     return space;
 }
 cipher = () => {
-    pen.x = 30;
     let message_letters_array = [];
     let message_size = 0;
     let to_cipher = `a` + field_to_cipher.textContent.toLowerCase() + `o`;
@@ -665,17 +667,17 @@ cipher = () => {
         message_size += character_size_variable;
         message_letters_array[message_letter] = [character_string, character_size_variable, message_size];
     }
-    html_canvas.width = message_letters_array[message_letters_array.length - 1][2] + 70;
-    html_canvas.height = character_size(1) + 80;
+    html_canvas.width = message_letters_array[message_letters_array.length - 1][2] + margin_vertical;
+    html_canvas.height = character_size(1) + margin_horizontal;
     ctx.fillStyle = (`#555`);
     ctx.fillRect(0, 0, html_canvas.width, html_canvas.height);
     // Rails
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
-        pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+        pen.x = indent_width + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
         character(encoded_character(message_letters_array[message_letter][0]), `rails`, 1);
     }
     for(message_letter = message_letters_array.length - 1; message_letter >= 0; message_letter--) {
-        pen.x = 38 + message_letters_array[message_letter][2];
+        pen.x = indent_width + message_letters_array[message_letter][2];
         character(encoded_character(message_letters_array[message_letter][0]), `rails`, -1);
     }
     // Lines and conjunctions
@@ -684,7 +686,7 @@ cipher = () => {
         || encoded_character(message_letters_array[message_letter][0]) === `conjunction_southwest`
         || encoded_character(message_letters_array[message_letter][0]) === `conjunction_northeast`
         || encoded_character(message_letters_array[message_letter][0]) === `conjunction_southeast`) {
-            pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+            pen.x = indent_width + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
             character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
@@ -712,7 +714,7 @@ cipher = () => {
         || encoded_character(message_letters_array[message_letter][0]) === `sun_northwest`
         || encoded_character(message_letters_array[message_letter][0]) === `sun_southwest`
         ) {
-            pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+            pen.x = indent_width + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
             character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
@@ -720,7 +722,7 @@ cipher = () => {
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
         if(encoded_character(message_letters_array[message_letter][0]) === `sunrise`
         || encoded_character(message_letters_array[message_letter][0]) === `sunset`) {
-            pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+            pen.x = indent_width + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
             character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
