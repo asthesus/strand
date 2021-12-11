@@ -1,4 +1,6 @@
 const field_character_size = document.getElementById(`field_character_size`);
+const field_black_size = document.getElementById(`field_pen_black_size`);
+const field_white_size = document.getElementById(`field_pen_white_size`);
 const field_to_cipher = document.getElementById(`field_to_cipher`);
 const html_canvas = document.getElementById(`canvas`);
 const ctx = html_canvas.getContext(`2d`); //
@@ -10,22 +12,19 @@ indent_width = 39;
 margin_horizontal = 80;
 margin_vertical = 70;
 character_size = (factor) => {return Math.round(Number(field_character_size.value) * 2 * factor)};
-pen = {x: character_size(1), y: character_size(1), black: 20, white: 8};
+pen_black_size = () => {return Math.round(Number(field_black_size.value))};
+pen_white_size = () => {return Math.round(Number(field_white_size.value))};
+pen = {x: character_size(1), y: character_size(1), black: pen_black_size(), white: pen_white_size()};
 top_rails = false; bottom_rails = false;
 stroke = (colour, thickness, type, variation, offset, length) => {
     ctx.beginPath();
     ctx.strokeStyle = colour;
     ctx.lineWidth = thickness;
     if(type === `arc`) {
-        if(variation === 1) {
-            ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), Math.PI * 1.5, 0, false);
-        } else if(variation === 2) {
-            ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), 0, Math.PI * 0.5, false);
-        } else if(variation === 3) {
-            ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), Math.PI * 0.5, Math.PI, false);
-        } else if(variation === 4) {
-            ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), Math.PI, Math.PI * 1.5, false);
-        }
+        if(variation === 1) {ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), Math.PI * 1.5, 0, false)}
+        else if(variation === 2) {ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), 0, Math.PI * 0.5, false)}
+        else if(variation === 3) {ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), Math.PI * 0.5, Math.PI, false)}
+        else if(variation === 4) {ctx.arc(pen.x + character_size(offset), pen.y + character_size(0.5), character_size(0.5), Math.PI, Math.PI * 1.5, false)};
     } else if(type === `line`) {
         if(variation === 1) {
             ctx.moveTo(pen.x + character_size(offset), pen.y);
@@ -59,26 +58,26 @@ stroke = (colour, thickness, type, variation, offset, length) => {
 }
 rails = (length) => {
     if(top_rails) {
-        stroke(`#000`, pen.black, `line`, 1, 0, length);
-        stroke(`#fff`, pen.white, `line`, 1, 0, length);
+        stroke(`#000`, pen_black_size(), `line`, 1, 0, length);
+        stroke(`#fff`, pen_white_size(), `line`, 1, 0, length);
     }
     if(bottom_rails) {
-        stroke(`#000`, pen.black, `line`, 2, 0, length);
-        stroke(`#fff`, pen.white, `line`, 2, 0, length);
+        stroke(`#000`, pen_black_size(), `line`, 2, 0, length);
+        stroke(`#fff`, pen_white_size(), `line`, 2, 0, length);
     }
 }
 character = (type, mode, direction) => {
     let space = 0;
     if(type === `space`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `arc`, 3, 1.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 1.75);
-            stroke(`#000`, pen.black, `arc`, 4, 1.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 1.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0);
-            stroke(`#fff`, pen.white, `arc`, 1, 0);
-            stroke(`#000`, pen.black, `arc`, 2, 0);
-            stroke(`#fff`, pen.white, `arc`, 2, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 1.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 1.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 1.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 1.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0);
         } else if(mode === `rails`) {
             top_rails = true;
             bottom_rails = true;
@@ -90,10 +89,10 @@ character = (type, mode, direction) => {
         space = 1.75;
     } else if(type === `hill`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `arc`, 2, 0);
-            stroke(`#fff`, pen.white, `arc`, 2, 0);
-            stroke(`#000`, pen.black, `arc`, 4, 1);
-            stroke(`#fff`, pen.white, `arc`, 4, 1);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 1);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 bottom_rails = false;
@@ -112,10 +111,10 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `waterfall`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `arc`, 1, 0);
-            stroke(`#fff`, pen.white, `arc`, 1, 0);
-            stroke(`#000`, pen.black, `arc`, 3, 1);
-            stroke(`#fff`, pen.white, `arc`, 3, 1);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 1);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 top_rails = false;
@@ -134,10 +133,10 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `crescent`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `arc`, 3, 0.5);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.5);
-            stroke(`#000`, pen.black, `arc`, 4, 0.5);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.5);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.5);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.5);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.5);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.5);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 rails(0.5 * direction);
@@ -155,10 +154,10 @@ character = (type, mode, direction) => {
         space = 0.5;
     } else if(type === `moon`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `arc`, 1, 0);
-            stroke(`#fff`, pen.white, `arc`, 1, 0);
-            stroke(`#000`, pen.black, `arc`, 2, 0);
-            stroke(`#fff`, pen.white, `arc`, 2, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 top_rails = false;
@@ -176,10 +175,10 @@ character = (type, mode, direction) => {
         space = 0.75;
     } else if(type === `conjunction_northwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `conjunction`, 1, 0);
-            stroke(`#fff`, pen.white, `conjunction`, 1, 0);
-            stroke(`#000`, pen.black, `arc`, 2, 0);
-            stroke(`#fff`, pen.white, `arc`, 2, 0);
+            stroke(`#000`, pen_black_size(), `conjunction`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `conjunction`, 1, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 top_rails = true;
@@ -198,10 +197,10 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `conjunction_southwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `conjunction`, 2, 0);
-            stroke(`#fff`, pen.white, `conjunction`, 2, 0);
-            stroke(`#000`, pen.black, `arc`, 1, 0);
-            stroke(`#fff`, pen.white, `arc`, 1, 0);
+            stroke(`#000`, pen_black_size(), `conjunction`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `conjunction`, 2, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 top_rails = false;
@@ -220,10 +219,10 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `conjunction_northeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `conjunction`, 1, 0);
-            stroke(`#fff`, pen.white, `conjunction`, 1, 0);
-            stroke(`#000`, pen.black, `arc`, 3, 1);
-            stroke(`#fff`, pen.white, `arc`, 3, 1);
+            stroke(`#000`, pen_black_size(), `conjunction`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `conjunction`, 1, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 1);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 top_rails = false;
@@ -242,10 +241,10 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `conjunction_southeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `conjunction`, 2, 0);
-            stroke(`#fff`, pen.white, `conjunction`, 2, 0);
-            stroke(`#000`, pen.black, `arc`, 4, 1);
-            stroke(`#fff`, pen.white, `arc`, 4, 1);
+            stroke(`#000`, pen_black_size(), `conjunction`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `conjunction`, 2, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 1);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 bottom_rails = false;
@@ -264,14 +263,14 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `erosion`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `arc`, 1, 0);
-            stroke(`#fff`, pen.white, `arc`, 1, 0);
-            stroke(`#000`, pen.black, `arc`, 3, 1);
-            stroke(`#fff`, pen.white, `arc`, 3, 1);
-            stroke(`#000`, pen.black, `arc`, 2, 0);
-            stroke(`#fff`, pen.white, `arc`, 2, 0);
-            stroke(`#000`, pen.black, `arc`, 4, 1);
-            stroke(`#fff`, pen.white, `arc`, 4, 1);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 1);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 1);
         } else if(mode === `rails`) {
             top_rails = true;
             bottom_rails = true;
@@ -283,14 +282,14 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `flood`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `arc`, 2, 0);
-            stroke(`#fff`, pen.white, `arc`, 2, 0);
-            stroke(`#000`, pen.black, `arc`, 4, 1);
-            stroke(`#fff`, pen.white, `arc`, 4, 1);
-            stroke(`#000`, pen.black, `arc`, 1, 0);
-            stroke(`#fff`, pen.white, `arc`, 1, 0);
-            stroke(`#000`, pen.black, `arc`, 3, 1);
-            stroke(`#fff`, pen.white, `arc`, 3, 1);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 1);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 1);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 1);
         } else if(mode === `rails`) {
             top_rails = true;
             bottom_rails = true;
@@ -302,10 +301,10 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `hourglass`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `conjunction`, 1, 0);
-            stroke(`#fff`, pen.white, `conjunction`, 1, 0);
-            stroke(`#000`, pen.black, `conjunction`, 2, 0);
-            stroke(`#fff`, pen.white, `conjunction`, 2, 0);
+            stroke(`#000`, pen_black_size(), `conjunction`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `conjunction`, 1, 0);
+            stroke(`#000`, pen_black_size(), `conjunction`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `conjunction`, 2, 0);
         } else if(mode === `rails`) {
             top_rails = true;
             bottom_rails = true;
@@ -317,8 +316,8 @@ character = (type, mode, direction) => {
         space = 1;
     } else if(type === `sun`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `circle`, 1, 0.25);
-            stroke(`#fff`, pen.white, `circle`, 1, 0.25);
+            stroke(`#000`, pen_black_size(), `circle`, 1, 0.25);
+            stroke(`#fff`, pen_white_size(), `circle`, 1, 0.25);
         } else if(mode === `rails`) {
             rails(0.75 * direction);
             top_rails = false;
@@ -331,8 +330,8 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `sunrise`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `circle`, 2, 0);
-            stroke(`#fff`, pen.white, `circle`, 2, 0);
+            stroke(`#000`, pen_black_size(), `circle`, 2, 0);
+            stroke(`#fff`, pen_white_size(), `circle`, 2, 0);
         } else if(mode === `rails`) {
             rails(0.5 * direction);
             // strandedness
@@ -343,8 +342,8 @@ character = (type, mode, direction) => {
         space = 0.5;
     } else if(type === `sunset`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `circle`, 3, 0);
-            stroke(`#fff`, pen.white, `circle`, 3, 0);
+            stroke(`#000`, pen_black_size(), `circle`, 3, 0);
+            stroke(`#fff`, pen_white_size(), `circle`, 3, 0);
         } else if(mode === `rails`) {
             rails(0.5 * direction);
             // strandedness
@@ -355,18 +354,18 @@ character = (type, mode, direction) => {
         space = 0.5;
     } else if(type === `spiral_northeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 1, 0, 0.75);
-            stroke(`#fff`, pen.white, `line`, 1, 0, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `line`, 1, 0.75, 0.75);
-            stroke(`#fff`, pen.white, `line`, 1, 0.75, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0.75, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
         } else if(mode === `rails`) {
             top_rails = false;
             rails(0.75 * direction);
@@ -380,18 +379,18 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `spiral_southeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 2, 0, 0.75);
-            stroke(`#fff`, pen.white, `line`, 2, 0, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `line`, 2, 0.75, 0.75);
-            stroke(`#fff`, pen.white, `line`, 2, 0.75, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0.75, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
         } else if(mode === `rails`) {
             bottom_rails = false;
             rails(0.75 * direction);
@@ -405,18 +404,18 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `spiral_northwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 1, 0.75, 0.75);
-            stroke(`#fff`, pen.white, `line`, 1, 0.75, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
-            stroke(`#000`, pen.black, `line`, 1, 0, 0.75);
-            stroke(`#fff`, pen.white, `line`, 1, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0.75, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0, 0.75);
         } else if(mode === `rails`) {
             top_rails = false;
             rails(0.75 * direction);
@@ -430,18 +429,18 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `spiral_southwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 2, 0.75, 0.75);
-            stroke(`#fff`, pen.white, `line`, 2, 0.75, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
-            stroke(`#000`, pen.black, `line`, 2, 0, 0.75);
-            stroke(`#fff`, pen.white, `line`, 2, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0.75, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0, 0.75);
         } else if(mode === `rails`) {
             bottom_rails = false;
             rails(0.75 * direction);
@@ -455,16 +454,16 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `wheel_northeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 1, 0.75, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `line`, 1, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0.75, 0.75);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 rails(0.75 * direction);
@@ -483,16 +482,16 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `wheel_southeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 2, 0.75, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `line`, 2, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0.75, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0.75, 0.75);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 rails(0.75 * direction);
@@ -511,16 +510,16 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `wheel_northwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 1, 0, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `line`, 1, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0, 0.75);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 top_rails = false;
@@ -539,16 +538,16 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `wheel_southwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 2, 0, 0.75);
-            stroke(`#000`, pen.black, `arc`, 1, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 1, 0.75);
-            stroke(`#000`, pen.black, `arc`, 2, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 2, 0.75);
-            stroke(`#000`, pen.black, `arc`, 3, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 3, 0.75);
-            stroke(`#000`, pen.black, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `arc`, 4, 0.75);
-            stroke(`#fff`, pen.white, `line`, 2, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 1, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 1, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 2, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 2, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 3, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 3, 0.75);
+            stroke(`#000`, pen_black_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `arc`, 4, 0.75);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0, 0.75);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 bottom_rails = false;
@@ -567,10 +566,10 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `sun_northeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 1, 0.5, 1);
-            stroke(`#000`, pen.black, `circle`, 1, 0);
-            stroke(`#fff`, pen.white, `line`, 1, 0.5, 1);
-            stroke(`#fff`, pen.white, `circle`, 1, 0);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0.5, 1);
+            stroke(`#000`, pen_black_size(), `circle`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0.5, 1);
+            stroke(`#fff`, pen_white_size(), `circle`, 1, 0);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 rails(0.5 * direction);
@@ -589,10 +588,10 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `sun_southeast`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 2, 0.5, 1);
-            stroke(`#000`, pen.black, `circle`, 1, 0);
-            stroke(`#fff`, pen.white, `line`, 2, 0.5, 1);
-            stroke(`#fff`, pen.white, `circle`, 1, 0);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0.5, 1);
+            stroke(`#000`, pen_black_size(), `circle`, 1, 0);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0.5, 1);
+            stroke(`#fff`, pen_white_size(), `circle`, 1, 0);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 rails(0.5 * direction);
@@ -611,10 +610,10 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `sun_northwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 1, 0, 0.75);
-            stroke(`#000`, pen.black, `circle`, 1, 0.25);
-            stroke(`#fff`, pen.white, `line`, 1, 0, 0.75);
-            stroke(`#fff`, pen.white, `circle`, 1, 0.25);
+            stroke(`#000`, pen_black_size(), `line`, 1, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `circle`, 1, 0.25);
+            stroke(`#fff`, pen_white_size(), `line`, 1, 0, 0.75);
+            stroke(`#fff`, pen_white_size(), `circle`, 1, 0.25);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 top_rails = false;
@@ -633,10 +632,10 @@ character = (type, mode, direction) => {
         space = 1.5;
     } else if(type === `sun_southwest`) {
         if(mode === `write`) {
-            stroke(`#000`, pen.black, `line`, 2, 0, 0.75);
-            stroke(`#000`, pen.black, `circle`, 1, 0.25);
-            stroke(`#fff`, pen.white, `line`, 2, 0, 0.75);
-            stroke(`#fff`, pen.white, `circle`, 1, 0.25);
+            stroke(`#000`, pen_black_size(), `line`, 2, 0, 0.75);
+            stroke(`#000`, pen_black_size(), `circle`, 1, 0.25);
+            stroke(`#fff`, pen_white_size(), `line`, 2, 0, 0.75);
+            stroke(`#fff`, pen_white_size(), `circle`, 1, 0.25);
         } else if(mode === `rails`) {
             if(direction === 1) {
                 bottom_rails = false;
@@ -761,6 +760,8 @@ program_character(`j`, `sun_northwest`);
 program_character(`z`, `sun_southwest`);
 
 field_character_size.addEventListener(`input`, () => {cipher()});
+field_black_size.addEventListener(`input`, () => {cipher()});
+field_white_size.addEventListener(`input`, () => {cipher()});
 field_to_cipher.addEventListener(`input`, () => {cipher()}); //
 
 cipher(); // initialize //
