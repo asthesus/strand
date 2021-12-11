@@ -1,5 +1,3 @@
-const field_height = document.getElementById(`field_height`); // fetch from document
-const field_width = document.getElementById(`field_width`);
 const field_character_size = document.getElementById(`field_character_size`);
 const field_to_cipher = document.getElementById(`field_to_cipher`);
 const html_canvas = document.getElementById(`canvas`);
@@ -11,12 +9,6 @@ saved_character_size_value = field_character_size.value; // create functions and
 character_size = (factor) => {return Math.round(Number(field_character_size.value) * 2 * factor)};
 pen = {x: character_size(1), y: character_size(1), black: 20, white: 8};
 top_rails = false; bottom_rails = false;
-adjust_canvas = () => {
-    html_canvas.width = field_width.value;
-    html_canvas.height = field_height.value;
-    ctx.fillStyle = (`#555`);
-    ctx.fillRect(0, 0, html_canvas.width, html_canvas.height);
-}
 stroke = (colour, thickness, type, variation, offset, length) => {
     ctx.beginPath();
     ctx.strokeStyle = colour;
@@ -659,12 +651,11 @@ character = (type, mode, direction) => {
         }
         space = 1.5;
     }
-    pen.x += character_size(space) * direction;
+    if(mode === `write`) {pen.x += character_size(space) * direction};
     return space;
 }
 cipher = () => {
-    adjust_canvas();
-    pen.x = character_size(1);
+    pen.x = 30;
     let message_letters_array = [];
     let message_size = 0;
     let to_cipher = `a` + field_to_cipher.textContent.toLowerCase() + `o`;
@@ -674,15 +665,17 @@ cipher = () => {
         message_size += character_size_variable;
         message_letters_array[message_letter] = [character_string, character_size_variable, message_size];
     }
+    html_canvas.width = message_letters_array[message_letters_array.length - 1][2] + 70;
+    html_canvas.height = character_size(1) + 80;
+    ctx.fillStyle = (`#555`);
+    ctx.fillRect(0, 0, html_canvas.width, html_canvas.height);
     // Rails
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
-        console.log(`${message_letters_array[message_letter][0]}`);
-        pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+        pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
         character(encoded_character(message_letters_array[message_letter][0]), `rails`, 1);
     }
     for(message_letter = message_letters_array.length - 1; message_letter >= 0; message_letter--) {
-        console.log(`${message_letters_array[message_letter][0]}`);
-        pen.x = character_size(1) + message_letters_array[message_letter][2];
+        pen.x = 38 + message_letters_array[message_letter][2];
         character(encoded_character(message_letters_array[message_letter][0]), `rails`, -1);
     }
     // Lines and conjunctions
@@ -691,7 +684,7 @@ cipher = () => {
         || encoded_character(message_letters_array[message_letter][0]) === `conjunction_southwest`
         || encoded_character(message_letters_array[message_letter][0]) === `conjunction_northeast`
         || encoded_character(message_letters_array[message_letter][0]) === `conjunction_southeast`) {
-            pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+            pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
             character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
@@ -719,7 +712,7 @@ cipher = () => {
         || encoded_character(message_letters_array[message_letter][0]) === `sun_northwest`
         || encoded_character(message_letters_array[message_letter][0]) === `sun_southwest`
         ) {
-            pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+            pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
             character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
@@ -727,7 +720,7 @@ cipher = () => {
     for(message_letter = 0; message_letter < message_letters_array.length; message_letter++) {
         if(encoded_character(message_letters_array[message_letter][0]) === `sunrise`
         || encoded_character(message_letters_array[message_letter][0]) === `sunset`) {
-            pen.x = character_size(1) + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
+            pen.x = 38 + message_letters_array[message_letter][2] - message_letters_array[message_letter][1];
             character(encoded_character(message_letters_array[message_letter][0]), `write`, 1);
         }
     }
@@ -765,21 +758,9 @@ program_character(`q`, `sun_southeast`);
 program_character(`j`, `sun_northwest`);
 program_character(`z`, `sun_southwest`);
 
-field_height.addEventListener(`input`, () => {  // add event listeners
-    adjust_canvas();
-    cipher();
-})
-field_width.addEventListener(`input`, () => {
-    adjust_canvas();
-    cipher();
-})
-field_character_size.addEventListener(`input`, () => {
-    adjust_canvas();
-    cipher();
-})
+field_character_size.addEventListener(`input`, () => {cipher()});
 field_to_cipher.addEventListener(`input`, () => {cipher()}); //
 
-adjust_canvas();
 cipher(); // initialize //
 
 // Create a function where the parameters visually show what the character will look like

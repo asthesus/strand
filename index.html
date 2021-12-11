@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" spellcheck="false">
 <head>
+    <script>history.scrollRestoration = "manual"</script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strand Code</title>
+    <title>Strand</title>
     <link rel="stylesheet" type="text/css" href="style/style.css">
     <!-- <link rel="icon" href="style/favicon.ico"> -->
 </head>
 <body>
     <div>
-        Width: <input class="field" type="number" id="field_width" name="width" min="1" value="1200">
-        Height: <input class="field" type="number" id="field_height" name="height" min="1" value="120">
         Character Size: <input class="field" type="number" id="field_character_size" name="character size" min="15" value="20">
         Input:
     </div>
     <div class="tocipher" id="field_to_cipher" contenteditable></div>
-    <br><canvas class="canvas" id="canvas"></canvas>
+    <br><canvas class="canvas" id="canvas" width=120 height=120></canvas>
     <script src="main.js"></script>
 </body>
 </html>
